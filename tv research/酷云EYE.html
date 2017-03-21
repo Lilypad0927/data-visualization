@@ -1,0 +1,677 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>酷云EYE</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="fullscreen=yes,preventMove=no" name="ML-Config">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <link href="images/logo.png" rel="apple-touch-icon-precomposed">
+    <link href="images/icon_144.png" sizes="144x144" rel="apple-touch-icon-precomposed">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css?bust=V1.0.9.32">
+    <link rel="stylesheet" href="css/analysis.css?bust=V1.0.9.32">
+    <link rel="stylesheet" href="css/rating_TV.css?bust=V1.0.9.32">
+    <link rel="stylesheet" href="css/help.css?bust=V1.0.9.32">
+    <link rel="stylesheet" href="css/colRank.css?bust=V1.0.9.32">
+    <script type="text/javascript" src="js/echarts/echart.js?bust=V1.0.9.32"></script>
+    <script type="text/javascript">
+        var eye = eye || {};
+        var _hmt = _hmt || [];
+    </script>
+
+</head>
+<body>
+<div class="ky_content">
+    <div id="nav">
+        <ul>
+            <li class="raiseli">
+                <a href="#eye/raise">
+                    <span class="font">建议众筹计划</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="font">实时用户关注度</span>
+                </a>
+            </li>
+            <li>
+                <a href="#eye/tv">
+                    <span class="font">频道排行</span>
+                </a>
+            </li>
+
+            <li style="display:none;">
+                <a href="#eye/ontv">
+                    <span class="font">实时频道市占率</span>
+                </a>
+            </li>
+            <li>
+                <a href="#eye/rank/1">
+                    <span class="font">节目排行</span>
+                </a>
+            </li>
+            <li>
+                <a href="#eye/userfavor">
+                    <span class="font">用户兴趣分类</span>
+                </a>
+            </li>
+            <li>
+                <a href="#eye/house">
+                    <span class="font">用户房价分析</span>
+                </a>
+            </li>
+            <li>
+                <a href="#eye/interest">
+                    <span class="font">用户兴趣分析</span>
+                </a>
+            </li>
+            <li class="ky_focus">
+                <a href="#eye/map">
+                    <span class="font">累计激活终端</span>
+                </a>
+            </li>
+            <li>
+                <a href="#eye/device">
+                    <span class="font">实时开机终端</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="mainContent" id="mainContent">
+        <div class="ky_head">
+            <a id="realBack" class="ky_analysis" href="javascript:void(0)">
+                <span class="backIcon"></span>
+                <span class="backText">返回</span>
+            </a>
+            <a id="tvBack" class="ky_analysis" href="javascript:void(0)">
+                <span class="backIcon"></span>
+                <span class="backText">返回</span>
+            </a>
+            <a id="helpBack" class="ky_analysis" href="javascript:void(0)">
+                <span class="backIcon"></span>
+                <span class="backText">返回</span>
+            </a>
+            <ul class="menu" id="nav_toggle">
+                <li class="menu_item"></li>
+                <li class="menu_item"></li>
+                <li class="menu_item"></li>
+            </ul>
+            <span class="text" id="subTitle">实时用户关注度</span>
+            <a id="helpEnter" class="helpEnter" href="javascript:void(0)"><span></span></a>
+            <span class="errorInfo" id="error"></span>
+        </div>
+        <div class="mapContent" id="mapContent">
+            <div id="map" class="onlineMap"></div>
+        </div>
+        <div class="mapContent" id="mainRating" style="display:none;overflow-y:hidden">
+        </div>
+    </div>
+    <div class="ky_logo cd-popup-trigger cd-popup-trigger1"></div>
+
+    <!-- logo点击弹出层及添加链接start -->
+    <div class="cd-popup cd-popup1">
+        <div class="cd-popup-container">
+            <p>是否现在进入酷云互动官方网站?</p>
+            <ul class="cd-buttons">
+                <li><a class="cd-popup-close cd-popup-close1" href="javascript:;">取消</a></li>
+                <li><a target="_blank" href="http://www.kuyun.com/">现在进入</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="kyeyepro">
+        <span></span>
+        <a target="_blank" href="http://pro.eye.kuyun.com"></a>
+    </div>
+    <!-- logo点击弹出层及添加链接end -->
+
+</div>
+<div class="ky_full" id="ky_full" style="display:none;padding:20px;">
+    <div id="min30">
+        <div class="title" id="min30Title">
+            <span id="tvName"></span>
+            <span id="columnName"></span>
+            <span>最近1小时</span>
+            <span id="timeNow"></span>
+            <span id="ratingNow"></span>
+            <span id="fullScreen"></span>
+            <span id="noneClick"></span>
+        </div>
+        <div id="min30Chart"></div>
+    </div>
+
+    <div id="day24Wrap" class="wrap">
+        <div id="day24">
+            <div id="day24Title" class="title"><span>昨天24小时</span></div>
+            <div id="day24Chart" class="chart"></div>
+        </div>
+    </div>
+    <div id="min5Wrap" class="wrap">
+        <div id="min5">
+            <div id="min5Title" class="title"><span>最近1分钟</span></div>
+            <div id="min5Chart" class="chart"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 纠错引导及弹出层start -->
+<!--<div class="error_tip_box">
+    <div class="error_tips"></div>
+</div>
+<div class="cd-popup cd-popup2" style="background-color: rgba(0,0,0, 0);">
+    <div class="cd-popup-container" style="background-color: rgba(255,255,255, 0.7);">
+        <p style="font-size:25px;padding: .5em 0 0;">提示<br /><span class="tips_con">感谢您的参与</span></p>
+        <ul class="cd-buttons">
+            <li style="width:100%;border-top: 1px solid #bbb;
+    padding-top: 8px;margin-bottom: 5px;"><a style="font-size:22px;color:#2087FC;" class="cd-popup-close cd-popup-close2" href="javascript:;">OK</a></li>
+        </ul>
+    </div>
+</div>-->
+<!-- 纠错引导及弹出层end -->
+
+<script id="tpl_realtime" type="text/template">
+    <div class="realtime" style="overflow-y: scroll">
+
+        <!--添加对比频道-->
+        <div class="real_top select_wrapper btnCompare" id="rating_channel">
+            <div class="select-control">
+                <span class="text">添加对比频道</span>
+            </div>
+            <span class="houseArrow addIcon" style="float:right;"></span>
+        </div>
+
+        <div class="real_top select_wrapper select-control btnYesterday" id="rating_day"><b class="text">昨天</b>
+            <span class="yesterdayIcon" style="float:right;"></span>
+        </div>
+
+
+        <!--内容-->
+        <div id="realtime_container" class="realTimeWrap">
+            <div>
+            <!--显示时间关注度-->
+            <div class="real_top ratingInfo">
+                <span class="time"></span>
+                <span class="focus"></span>
+            </div>
+
+            <!--tab 60分 60秒-->
+            <div class="rating_tab">
+                <span class="tab_span" id="rating_hour">最近60分</span>
+                <span class="tab_span" id="rating_minute">最近60秒</span>
+
+                <span class="tab_span inOut" id="rating_inOut"><span class="to">流入流出</span></span>
+                <!--<span class="error_correction cd-popup-trigger2">纠错</span>
+                <span class="tv_playing">正在播放：<i></i></span>-->
+                
+            </div>
+            <div class="ratingChart"></div>
+            <div class="tipInfo"></div>
+            </div>
+        </div>
+        <div class="realtime_columns" id="realtime_columns">
+        </div>
+    </div>
+</script>
+
+<script id="tpl_column_list" type="type/template">
+    <div class="table_tab">       
+        <span class="on" id="epg_column">EPG信息</span>
+        <span class="" id="user_column">用户留存</span>      
+        <span class="" id="inout_column">流入流出</span>       
+        <span class="" id="tvinfo_column">频道概况</span>
+        <span id="tvinfo_icon"></span>   
+    </div>
+
+    <div class="columns" id="real_list">
+        <table cellspacing="0" cellpadding="0">
+            <thead>
+            <th class="historyColumn">历史节目</th>
+            <th>关注度</th>
+            </thead>
+            <tbody>
+            <% for (var i = 0, len = info.length; i < len; i++) { %>
+            <tr data-epgid="<%=info[i].id %>">
+                <td>
+                    <span class="tname"><%=info[i].cd_name%></span>
+                    <span class="time"><%=info[i].start_time.substr(11,5)%>~<%=info[i].end_time.substr(11,5)%></span>
+                </td>
+                <td>
+                    <%var percents = parseInt(info[i].ssl*1000000)/10000;%>
+                    <%var ratio = parseInt(info[i].ssl*1000000),maxs = parseInt(max*1000000),percent = ratio/maxs;%>
+                    <div class="cont_line">
+                        <span class="col_check" style="width:<%=percent*100%>%"></span>
+                    </div>
+                    <span class="num"><%=percents.toFixed(4)%>%</span>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</script>
+<!-- tvChannelName -->
+<script id="tpl_tv_rate_list" type="type/template">
+    <div class="szl_table">
+        <table cellspacing="0" cellpadding="0">
+            <thead>
+            <th class="channelName">频道</th>
+            <th>关注度</th>
+            <th>市占率</th>
+            </thead>
+            <tbody>
+            <%var max_ssl = parseInt(max_ssl*10000),max_szl = parseInt(max_szl*10000); %>
+            <% for (var i = 0, len = info.length; i < len; i++) { %>
+            <tr data-id="<%=info[i].tv_id%>" data-name="<%=info[i].tv_name||''%>">
+                <td class="tvChannelName">
+                    <span class="tname"><%=i+1%>.<%=info[i].tv_name%></span>
+
+                </td>
+                <td class="tv_two">
+                    <%var ssl = parseInt(info[i].tv_ratings*10000),pt = ssl/max_ssl;%>
+                    <div class="cont_line">
+                        <span class="col_check" style="width:<%=pt*100%>%"></span>
+                    </div>
+                    <span class="num"><%=info[i].tv_ratings%>%</span>
+                </td>
+                <td class="tv_two">
+                    <%var sczyls = parseInt(info[i].market_ratings*10000),pt = sczyls/max_szl;%>
+                    <div class="cont_line">
+                        <span class="col_check orange" style="width:<%=pt*100%>%"></span>
+                    </div>
+                    <span class="num"><%=info[i].market_ratings%>%</span>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</script>
+<script id="tpl_tv_history_list" type="type/template">
+    <div class="columns">
+        <table cellspacing="0" cellpadding="0">
+            <thead>
+            <th class="historyColumn">历史节目</th>
+            <th>关注度</th>
+            </thead>
+            <tbody>
+            <% var info = result;for (var i = 0, len = info.length; i < len; i++) { %>
+            <tr>
+                <td>
+                    <span class="tname"><%=info[i].cd_name%></span>
+                    <span class="time"><%=info[i].start_time.substr(11,5)%>~<%=info[i].end_time.substr(11,5)%></span>
+                </td>
+                <td>
+                    <%var ratio = parseInt(info[i].tv_ratings*10000),maxs = parseInt(max*10000),percent = ratio/maxs;%>
+                    <div class="cont_line">
+                        <span class="col_check" style="width:<%=percent*100%>%"></span>
+                    </div>
+                    <span class="num"><%=info[i].tv_ratings%>%</span>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</script>
+<!--
+<th>关注度</th>
+<td>
+    <%var percents = parseInt(info[i].ssl*1000000)/10000;%>
+    <%var ratio = parseInt(info[i].ssl*1000000),percent = ratio/max_ssl;%>
+    <div class="cont_line">
+        <span class="col_check" style="width:<%=percent*100%>%"></span>
+    </div>
+    <span class="num"><%=percents.toFixed(4)%>%</span>
+</td> -->
+<script id="tpl_on_tv_list" type="type/template">
+    <div class="szl_table ontv_table">
+        <table cellspacing="0" cellpadding="0">
+            <thead>
+            <th class="channelName">频道</th>
+            <th>市占率</th>
+            </thead>
+            <tbody>
+            <%var max_ssl = parseInt(max_ssl*1000000),max_szl = parseInt(max_szl*1000000); %>
+            <% for (var i = 0, len = info.length; i < len; i++) { %>
+            <tr>
+                <td class="channelName">
+                    <span class="tname"><%=i+1%>.<%=info[i].name%></span>
+
+                </td>
+
+                <td>
+                    <%var sczyl = parseInt(info[i].sczyl*1000000)/10000;%>
+                    <%var sczyls = parseInt(info[i].sczyl*1000000),pt = sczyls/max_szl;%>
+                    <div class="cont_line">
+                        <span class="col_check orange" style="width:<%=pt*100%>%"></span>
+                    </div>
+                    <span class="num"><%=sczyl.toFixed(4)%>%</span>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script id="tpl_rankPage" type="type/template">
+    <div class="tvContainer colRank" id="colRank">
+        <div class="tvOption mtv crankHead" id="tv_day">
+            <div class="form-control" style="padding:0;">
+                <span class="text">昨天</span>
+            </div>
+            <span class="houseArrow"></span>
+        </div>
+        <div class="tvOption mtv crankHead" id="tvOption">
+            <div class="form-control" style="padding:0;">
+                <span class="text">全部播放时段</span>
+            </div>
+            <span class="houseArrow"></span>
+        </div>
+        <div class="tvOption crankHead" id="channelOption">
+            <select name="" id="colTv" class="form-control">
+                <option value="0">全部频道</option>
+                <option value="1">卫视</option>
+                <option value="2">央视</option>
+            </select>
+            <span class="houseArrow"></span>
+        </div>
+        <div class="tvOption crankHead" id="typeOption">
+            <select name="" id="colColumn" class="form-control">
+                <option value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17">全部节目种类</option>
+                <option value="2">综艺</option>
+                <option value="3">电视剧</option>
+            </select>
+            <span class="houseArrow"></span>
+        </div>
+        <div class="tvContent" id="tvContent">
+            <div class="szl_table">
+                <table cellspacing="0" cellpadding="0" class="colTb" id="colTb">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tpl_rankItems" type="type/template">
+    <thead>
+    <tr>
+        <th>节目</th>
+        <th>关注度</th>
+        <th>市占率</th>
+    </tr>
+    </thead>
+
+    <% for(var i= 0,len=data.length;i<len;i++){ %>
+
+    <tr>
+        <td class="td_col" id="<%=data[i].ca_id %>">
+            <span><span class="colIdx"><%=i+1 %>.</span><%=data[i].cd_name %></span>
+                    <span><%=data[i].tv_name %>&nbsp;&nbsp;<%=data[i].start_time.slice(-8,-3) %>~<%=data[i].end_time.slice(-8,-3) %>
+                    </span>
+        </td>
+        <td>
+
+            <div class="cont_line">
+                <span class="col_check" style="width:<%= (data[i].tv_ratings/maxTv).toFixed(3)*100 %>%"></span>
+            </div>
+            <span class="rating_pec"><%=data[i].tv_ratings %>%</span>
+        </td>
+        <td>
+            <div class="cont_line">
+                <span class="col_check orange"
+                      style="width:<%=(data[i].market_ratings/maxMarket).toFixed(3)*100 %>%"></span>
+            </div>
+            <span class="rating_pec"><%=data[i].market_ratings %>%</span>
+        </td>
+    </tr>
+    <% }%>
+
+</script>
+<script id="tpl_rankDetail" type="type/template">
+    <div class="realtime" id="rank">
+        <div id="rankTitle">
+            <span id="titleCol" class="colorPurple"><%=tvname%></span>
+            <span id="titleTtype" class="colorGray"><%=typename%></span>
+        </div>
+        <div id="rankChartWrap">
+            <div id="rankChart"></div>
+        </div>
+        <div id="rankList" class="colorGray">
+            <div id="listTitle">节目列表</div>
+            <div id="listHead">
+                <ul>
+                    <li class="listDate">日期</li>
+                    <li class="listTv">频道</li>
+                    <li class="listCol">节目名称</li>
+                    <li class="listTime">时段</li>
+                    <li class="listRating">关注度</li>
+                    <li class="listmarket">市占率</li>
+                </ul>
+            </div>
+
+            <div id="listFoot"><span id="prePage">&lt;&nbsp;上一页</span><span id="nextPage">下一页&nbsp;&gt; </span></div>
+        </div>
+    </div>
+</script>
+<script id="tpl_rankDetailEpg" type="text/template">
+    <div id="listTitle">节目列表</div>
+    <div id="listHead">
+        <ul>
+            <li class="listDate">日期</li>
+            <li class="listTv">频道</li>
+            <li class="listCol">节目名称</li>
+            <li class="listTime">时段</li>
+            <li class="listRating">关注度</li>
+            <li class="listMarket">市占率</li>
+        </ul>
+    </div>
+    <% for(var i= 0,len=data.length;i<len;i++){ %>
+    <ul class="epgItem" data-id="<%=data[i].id%>">
+        <li class="listDate"><span class="moreFlag">+</span><%=data[i].start_time.slice(0,10)%></li>
+        <li class="listTv"><%=data[i].tv_name%></li>
+        <li class="listCol"><%=data[i].cd_name%></li>
+        <li class="listTime"><%=data[i].start_time.slice(-8,-3)%>-<%=data[i].end_time.slice(-8,-3)%></li>
+        <li class="listRating"><%=data[i].tv_ratings%>%</li>
+        <li class="listMarket"><%=data[i].market_ratings%>%</li>
+        <div class="detailInfo">
+            <div>节目名称：<span><%=data[i].cd_name  %></span></div>
+            <div>时间：<span><%=data[i].start_time.slice(-8,-3)%>-<%=data[i].end_time.slice(-8,-3)%></span></div>
+            <div>市占率：<span><%=data[i].market_ratings%>%</span></div>
+        </div>
+    </ul>
+    <%}%>
+    <div id="listFoot"><span id="prePage">&lt;&nbsp;上一页</span><span id="nextPage">下一页&nbsp;&gt; </span></div>
+</script>
+<script id="tpl_tvInfo" type="type/template">
+    <div id="tvInfo">
+        <select id="weekSelect" class="form-control" disabled="disabled"></select>
+        <span class="houseArrow" style="display: none"></span>
+
+        <div class="interestMapAll" id="tvInfoCharts">
+            <div class="chartWrap">
+                <div class="toRelative">
+                    <div class="weekTitle">地区分布</div>
+                    <div class="weekChart" id="regionChart"></div>
+                </div>
+            </div>
+            <div class="chartWrap">
+                <div class="toRelative">
+                    <div class="weekTitle">观众兴趣点</div>
+                    <div class="weekChart" id="interestChart"></div>
+                </div>
+            </div>
+            <div class="chartWrap_fullScreen">
+                <div class="toRelative">
+                    <div class="weekTitle">消费水平(等级越高,消费水平越高)</div>
+                    <div class="weekChart" id="buyChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+ <!-- epginfo-select -->
+<script id="tpl_epgInfo" type="type/template">
+    <div id="epgInfo">
+        <select id="weekSelect" class="form-control epginfo-select" disabled="disabled"></select>
+        <span class="houseArrow" style="display: none"></span>
+        <div class="form-control epginfo_compare" id="epginfo_compare"><span class="text">添加对比</span><span class="houseArrow addIcon"></span></div>
+        <div class="epginfo_clist" style="display:none;">
+            
+        </div>
+        <div class="interestMapAll" id="tvInfoCharts">
+            <div class="chartWrap_fullScreen">
+                <div class="toRelative">
+                    <div class="weekTitle" id="rateTitle" style="border: 0">节目关注度
+                        <div class="avgRate">平均关注度：<span>0.000%</span></div>
+                        <div id="epgHighLow">流入流出</div>
+                    </div>
+                    <div class="weekChart" id="rateChart"></div>
+                </div>
+            </div>
+            <div class="chartWrap tipInfo" style="display:none;"></div>
+            <div class="chartWrap lazyLoad">
+                <div class="toRelative">
+                    <div class="weekTitle">地区分布</div>
+                    <div class="weekChart" id="regionChart">
+                        <div class="loadingTxt">数据正在玩命计算，<br/>请稍后访问 ...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chartWrap lazyLoad">
+                <div class="toRelative">
+                    <div class="weekTitle">观众兴趣点</div>
+                    <div class="weekChart" id="interestChart">
+                        <div class="loadingTxt">数据正在玩命计算，<br/>请稍后访问 ...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chartWrap_fullScreen lazyLoad">
+                <div class="toRelative">
+                    <div class="weekTitle">消费水平(等级越高,消费水平越高)</div>
+                    <div class="weekChart" id="buyChart">
+                        <div class="loadingTxt">数据正在玩命计算，<br/>请稍后访问 ...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chartWrap_fullScreen lazyLoad" id="remainWrap" >
+
+                  <div id="weekTitleWrap">  <div class="weekTitle">观众留存</div></div>
+                    <div class="weekChart" id="remainChart">
+                        <div class="loadingTxt">数据正在玩命计算，<br/>请稍后访问 ...</div>
+                    </div>
+
+            </div>
+            <div class="chartWrap lazyLoad">
+                <div class="toRelative">
+                    <div class="weekTitle">与<span id="titleColumnName">本节目</span>重叠度</div>
+                    <div class="weekChart" id="overlapChart">
+                        <div class="loadingTxt">数据正在玩命计算，<br/>请稍后访问 ...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chartWrap lazyLoad">
+                <div class="toRelative">
+                    <div class="weekTitle">与其他节目重叠度</div>
+                    <div class="weekChart" id="overlapOtherChart">
+                        <div class="loadingTxt">数据正在玩命计算，<br/>请稍后访问 ...</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="epl_epgInfo_overlap" type="type/template">
+    <div class="bgCircle">
+        <div class="bgCircle1"></div>
+        <div class="bgCircle2"></div>
+        <div class="bgCircle3"></div>
+    </div>
+    <div class="columnCircle">
+    <div class="columnCircle1 circleWrap"><div class="realCircle">
+            <div class="circleName"><%=columnName%></div>
+    </div></div>
+    <% for(var i= 0,len=Math.min(data.length,10);i<len;i++){ %>
+        <div class="columnCircle<%=i+2 %> circleWrap"><div class="realCircle">
+            <div class="circleInfo">
+
+                <div class="circleColumn"><%=data[i].name%></div>
+                <div class="circleRate"><%=data[i].score%></div>
+            </div>
+        </div></div>
+    <% }%>
+    </div>
+</script>
+<script id="epl_epgInfo_remain" type="type/template">
+
+    <ul>
+        <% for(var i=0,len=data.length;i<len;i++) {%>
+        <li class="remainItem">
+            <span class="remainName "><%=data[i].name %> </span>
+            <span class="remainName" style="font-size: 0.8em"><%=data[i].startTime %>~<%=data[i].endTime %></span>
+            <span class="remainVal"><%=data[i].score %></span>
+        </li>
+        <%}%>
+    </ul>
+</script>
+<div id="baidu" style="display:none;"></div>
+<script type="text/javascript" src="js/lib/jquery-1.8.2.min.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/urlHelper.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/tool.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/echarts/china-place-list.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/echarts/random-arr.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/lib/underscore.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/lib/Router.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/lib/eventRouter.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/lib/require.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/menu.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/ajaxfileupload.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/widgets.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/jquery.placeholder.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/common/thread-manager.js?bust=V1.0.9.32"></script>
+<script type="text/javascript" src="js/app.js?bust=V1.0.9.32"></script>
+
+<script type="text/javascript">
+//控制logo点击弹出层
+    jQuery(document).ready(function($){
+    //open popup
+    $('.cd-popup-trigger1').on('click', function(event){
+        event.preventDefault();
+        $('.cd-popup1').addClass('is-visible');
+    });
+    
+    //close popup
+    $('.cd-popup').on('click', function(event){
+        if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') ) {
+            event.preventDefault();
+            $(this).removeClass('is-visible');
+        }
+    });
+    //close popup when clicking the esc keyboard button
+    $(document).keyup(function(event){
+        if(event.which=='27'){
+            $('.cd-popup').removeClass('is-visible');
+        }
+    });
+
+    
+    //EYE Pro 链接条的显示隐藏
+    if(sessionStorage.getItem("eyepro") == "eyehide"){
+        $(".kyeyepro").hide();
+    }else{
+        $(".kyeyepro").show();
+    }
+    $(".kyeyepro span").click(function(){
+        sessionStorage.setItem("eyepro", "eyehide");
+        $(".kyeyepro").fadeOut();
+    })
+
+});
+</script>
+</body>
+</html>

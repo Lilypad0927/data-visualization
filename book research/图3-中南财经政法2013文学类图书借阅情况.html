@@ -1,0 +1,238 @@
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>中南财经政法2013文学类图书借阅情况</title>  
+  </head>  
+  <style>
+        .axis path,
+        .axis line{
+	         fill: none;
+	         stroke: black;
+	         shape-rendering: crispEdges;
+        }
+        .axis text {
+	         font-family: sans-serif;
+	         font-size: 11px;
+        }
+		
+		.MyText {
+		fill: white;
+		font-weight:bold;
+		text-anchor: middle;
+	    }
+		
+		.MyText2 {
+		font-family:Arial,微软雅黑;
+		font-weight:bold;
+		font-size:18px;
+		text-anchor: middle;
+	    }
+		
+		.tooltip{
+	    font-family: simsun;
+	    font-size: 14px;
+	    width: 120;
+	    height: auto;
+	    position: absolute;
+	    text-align: center;
+        border-style: solid; 
+	    border-width: 1px;
+	    background-color: white;
+	    border-radius: 5px;
+        }
+		
+		.title{
+		font-family:Arial,微软雅黑;
+		font-weight:bold;
+		font-size:30px;
+		text-anchor:middle;
+		}
+		
+  </style>
+  <body> 
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>  
+        <script>	
+		//画布大小
+		var width = 800;
+		var height = 600;
+		//在 body 里添加一个 SVG 画布	
+		var svg = d3.select("body").append("svg")
+					   .attr("width",width)
+					   .attr("height",height);
+		//画布周边的空白
+	    var padding = {left:30, right:30, top:20, bottom:20};
+		
+		//数组
+		var dataset =  [33,30,25,24,24,23,21,19,19,19,19,19,19,18,18];
+		var dataset2 = ["小说","赏析","小说","小说","小说","小说","小说","小说","经典","经典","小说","小说","经典","小说","经典"];
+		var dataset3 = ["天龙八部","蒋勋说红楼梦","陆小凤传奇","十宗罪：中国十大变态凶杀案","福尔摩斯探案全集","女心理师","笑傲江湖","倚天屠龙记","德川家康","The great Gatsby",
+		                "鹿鼎记","京华烟云","悲惨世界","三生三世枕上书","罪与罚"];
+		
+		//标题
+		var title="中南财经政法2013文学类图书借阅情况";
+		var head_height = 30;
+		
+		//x轴的比例尺
+	    var xScale = d3.scale.ordinal()
+		.domain(d3.range(dataset.length))
+		.rangeRoundBands([0, width - padding.left - padding.right]);
+
+	    //y轴的比例尺
+	    var yScale = d3.scale.linear()
+		.domain([0,d3.max(dataset)])
+		.range([height - padding.top - padding.bottom, 0]);
+
+	    //定义x轴
+	    var xAxis = d3.svg.axis()
+	 	.scale(xScale)
+		.orient("bottom");
+		
+	    //定义y轴
+	    var yAxis = d3.svg.axis()
+		.scale(yScale)
+		.orient("left");
+         
+		//矩形之间的空白
+	    var rectPadding = 5;
+		
+		//添加一个提示框
+		var tooltip = d3.select("body")
+							.append("div")
+							.attr("class","tooltip")
+							.style("opacity",0.0);
+		
+		/*var axis = d3.svg.axis().scale(xScale).orient("bottom");
+		svg.append("g").attr("class","axis")
+			.attr("transform","translate(10,250)").call(axis);*/
+		
+		var rects = svg.selectAll("rect")
+		   .data(dataset)
+		   .enter()
+		   .append("rect")
+		   .attr("transform","translate(" + padding.left + "," + padding.top + ")")
+		   .attr("x", function(d,i){
+			return xScale(i) + rectPadding/2;
+		   })
+		   .attr("y",function(d){
+				return 550 ;
+		   })
+		   .attr("height",0)
+		   .attr("fill","purple")
+		   .on("click",function(d,i){
+				d3.select(this)
+				  .attr("fill","red");
+		   })
+		   .on("mouseover",function(d,i){
+				d3.select(this)
+				  .attr("fill","blue");
+				  /*
+				鼠标移入时，
+				（1）通过 selection.html() 来更改提示框的文字
+				（2）通过更改样式 left 和 top 来设定提示框的位置
+				（3）设定提示框的透明度为1.0（完全不透明）
+				*/
+				tooltip.html(dataset3[i] + "<br />")
+					.style("left", (d3.event.pageX) + "px")
+					.style("top", (d3.event.pageY + 20) + "px")
+					.style("opacity",1.0);
+		   })
+		   .on("mousemove",function(d){
+				/* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+				tooltip.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY + 20) + "px");
+			})
+		   .on("mouseout",function(d,i){
+				d3.select(this)
+				  .transition()
+		          .duration(500)
+				  .attr("fill","steelblue");
+				  /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+				tooltip.style("opacity",0.0);
+		   })
+		   .transition()
+		   .duration(3000)
+		   .ease("bounce")
+		   .delay(function(d,i){
+				return 200*i;
+		   })
+		   .attr("x", function(d,i){
+			return xScale(i) + rectPadding/2;
+		   })
+		   .attr("y",function(d){
+			return yScale(d);
+		   })
+		   .attr("width", xScale.rangeBand() - rectPadding )
+		   .attr("height", function(d){
+			return height - padding.top - padding.bottom - yScale(d);
+		   })
+		   .attr("fill","steelblue");
+
+		   
+		svg.selectAll(".MyTest")
+            .data(dataset)
+            .enter()
+			.append("text")
+            .attr("class","MyText")
+		    .attr("transform","translate(" + padding.left + "," + padding.top + ")")
+		    .attr("x", function(d,i){
+			return xScale(i) + rectPadding/2;
+		    })
+		    .attr("y",function(d){
+			return yScale(d);
+		    })
+		    .attr("dx",function(){
+			return (xScale.rangeBand() - rectPadding)/2;
+		    })
+		    .attr("dy",function(d){
+			return 20;
+		    })
+            .text(function(d){
+				return d;
+			});
+			
+			svg.selectAll(".MyText2")
+        .data(dataset2)
+        .enter()
+        .append("text")
+        .attr("class","MyText2")
+        .attr("transform","translate(" + padding.left + "," + padding.top + ")")
+        .attr("x", function(d,i){
+            return xScale(i) + rectPadding/2;
+        } )
+        .attr("y",function(d,i){
+            return 530;
+        })
+        .attr("dx",function(){
+            return (xScale.rangeBand() - rectPadding)/2;
+        })
+        .attr("dy",function(d){
+            return 20;
+        })
+		.attr("fill",function(d,i){
+		if (dataset2[i] =="小说") return "red";
+		else return "green";
+		})
+		.text(function(d){
+            return d;
+        });
+			
+		svg.append("g")
+		   .append("text") 
+		   .text(title) 
+		   .attr("class","title") 
+		   .attr("x",width/2) 
+		   .attr("y",head_height);
+		
+		svg.append("g")
+			.attr("class","axis")
+			.attr("transform","translate(" + padding.left + "," + (height - padding.bottom) + ")")
+			.call(xAxis);
+			
+		svg.append("g")
+			.attr("class","axis")
+			.attr("transform","translate(" + padding.left + "," + padding.top + ")")
+			.call(yAxis); 
+		
+        </script>
+   </body>  
+</html> 

@@ -1,0 +1,170 @@
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>亚马逊中国时间</title>  
+  </head> 
+
+<style>
+    .tooltip{
+	 font-family: simsun;
+	 font-size: 14px;
+	 width: 120;
+	 height: auto;
+	 position: absolute;
+	 text-align: center;
+     border-style: solid; 
+	 border-width: 1px;
+	 background-color: white;
+	 border-radius: 5px;
+    }
+</style>
+
+    <body>  
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>  
+        <script>
+		
+		var width = 800;
+		var height = 800;
+		
+		var dataset = [{category:"2015",name:"岛上书店 基金从业资格考试统编教材（上） 基金从业资格考试统编教材（下） 肖荣秀考研政治命题人1000题 孤独是生命的礼物 24个比利 虚无的十字架 阿弥陀佛么么哒 无声告白 秘密花园1 秘密花园2",num:11},
+                       {category:"2014",name:"DK宇宙大百科 解忧杂货店 乖，摸摸头 恰到好处的幸福",num:4},
+                       {category:"2012",name:"滚蛋吧！肿瘤君！ 繁花",num:2},
+                       {category:"2010",name:"蔡康永的说话之道",num:1},
+                       {category:"2008",name:"DK万物运转的秘密 笑猫日记",num:2},
+                       {category:"2006",name:"全球通史 自控力",num:2},
+					   {category:"2003",name:"追风筝的人",num:1},
+					   {category:"1942",name:"小王子",num:1},
+					   {category:"1934",name:"边城",num:1}
+					   ];
+		
+		var svg = d3.select("body")
+		            .append("svg")
+					.attr("width",width)
+					.attr("height",height);
+		
+		var pie = d3.layout.pie().value(function(d){return d.num;});   // 数据转换
+		
+		var fontsize = 14;
+		var outerRadius = width / 2;
+		var innerRadius = width / 4;
+		
+		var arc = d3.svg.arc()
+						.innerRadius(innerRadius)
+						.outerRadius(outerRadius);
+		
+		var color = d3.scale.category10();
+		
+		var piedata = pie(dataset);
+		
+		console.log(piedata);
+		
+		var drag = d3.behavior.drag()
+					.origin(function(d) { return d; })
+					.on("drag", dragmove);
+		
+		var gAll = svg.append("g")
+					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
+					  
+		var arcs = svg.selectAll(".arcs_g")
+					  .data(piedata)
+					  .enter()
+					  .append("g")
+					  .each(function(d){   // 加空白
+					      var padding = 0.01;
+						  d.startAngle += padding;
+						  d.endAngle -= padding;
+						  d.dx = outerRadius;
+						  d.dy = outerRadius;
+					  })
+					  .call(drag)
+					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
+					  
+		arcs.append("path")
+			.attr("fill",function(d,i){
+				return color(i);
+			})
+			.attr("d",function(d){
+				var initArc = { 
+				startAngle: d.startAngle,
+                endAngle: d.startAngle,
+                padAngle: 0,
+                data: d.data,
+                value: d.value 
+				};
+                return arc(initArc);
+			})
+			.on("mouseover",function(d,i){
+				d3.select(this)
+					.style("fill","yellow");
+			})
+			.on("mouseout",function(d,i) { 
+				d3.select(this)
+					.transition()
+                    .duration(1000)
+					.style("fill",color(i));
+			})
+			.transition()
+            .delay(function(d,i){
+                return i * 100;
+            })
+            .duration(500)
+            .attr("d",function(d){
+                return arc(d);
+            });
+		
+		arcs.append("text")
+			.attr("transform",function(d){
+				return "translate(" + arc.centroid(d) + ")";
+			})
+			.style("font-size",fontsize)
+			.attr("text-anchor","middle")
+			.transition()
+			.delay(function(d,i){
+                return i * 150;
+            })
+			.text(function(d){
+				return d.data.category + "年: " +d.value ;
+			});
+		
+		console.log(dataset);
+		console.log(pie(dataset));
+		
+		function dragmove(d) {
+			d.dx += d3.event.dx;
+			d.dy += d3.event.dy;
+			d3.select(this)
+				.attr("transform","translate("+d.dx+","+d.dy+")");
+		}
+		  
+		//添加一个提示框
+		var tooltip = d3.select("body")
+							.append("div")
+							.attr("class","tooltip")
+							.style("opacity",0.0);
+		
+		arcs.on("mouseover",function(d){
+				/*
+				鼠标移入时，
+				（1）通过 selection.html() 来更改提示框的文字
+				（2）通过更改样式 left 和 top 来设定提示框的位置
+				（3）设定提示框的透明度为1.0（完全不透明）
+				*/
+				tooltip.html(d.data.name + "<br />")
+					.style("left", (d3.event.pageX) + "px")
+					.style("top", (d3.event.pageY + 20) + "px")
+					.style("opacity",1.0);
+			})
+			.on("mousemove",function(d){
+				/* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+				tooltip.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY + 20) + "px");
+			})
+			.on("mouseout",function(d){
+				/* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+				tooltip.style("opacity",0.0);
+			});
+		  
+        </script>
+		
+    </body>  
+</html>
